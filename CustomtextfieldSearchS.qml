@@ -1,5 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtGraphicalEffects 1.12
+
 
 
 TextField {
@@ -8,16 +10,16 @@ TextField {
         implicitHeight: 40
 
         //Custom Properties
-        property color  colorDefault: "#E6E4E4"
+        property color  colorDefault: "#F8B234"
         property color  colorOnfocus: "#ffffff"
         property color  colorMouseover: "#ffffff"
         property color  colorBorderOnFocus: "#ffffff"
 
         width: 300
         placeholderText: qsTr("Search")
-        color: "#000000"
+         color: "#ffffff"
         clip: true
-        placeholderTextColor: "#000000"
+        placeholderTextColor: "#ffffff"
         font.family: "Poppins"
         font.pixelSize: 10
         leftPadding: 42
@@ -37,7 +39,7 @@ TextField {
                 height: parent.height / 2
                 anchors.left: parent.left
                 anchors.top: parent.top
-                source: "../images/Capa 2.png"
+                source: "img/Capa 2.png"
                 anchors.topMargin: textField.height * 0.25
                 sourceSize.width: 20
                 anchors.leftMargin: parent.width * 0.03
@@ -46,6 +48,11 @@ TextField {
 
 
 
+            }
+            ColorOverlay {
+                anchors.fill: iconSearch
+                source: iconSearch
+                color: "#ffffff"
             }
 
         }
@@ -56,7 +63,7 @@ TextField {
             width: 3
             height: 40
             anchors.left: parent.left
-            source: "../images/Rectángulo 114.png"
+            source: "img/Rectángulo 114.png"
             anchors.leftMargin: parent.width * 0.1
             fillMode: Image.Stretch
         }

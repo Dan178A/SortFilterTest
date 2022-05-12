@@ -2,7 +2,6 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
 import QtQml.Models 2.3
-import "Sidebar/components"
 import "SortFilter"
 
 Item{
@@ -12,14 +11,7 @@ Item{
     signal itemClicked(var string);
     signal suggest(string query);
     signal search(string query);
-    ListModel {
-        id: nameModel
-        ListElement { name: "Alice"; team: "Crypto" }
-        ListElement { name: "Bob"; team: "Crypto" }
-        ListElement { name: "Jane"; team: "QA" }
-        ListElement { name: "Victor"; team: "QA" }
-        ListElement { name: "Wendy"; team: "Graphics" }
-    }
+
     DelegateModel {
         id: delegateModel
 
