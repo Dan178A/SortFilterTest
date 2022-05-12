@@ -1,5 +1,6 @@
 import sys
-
+#https://stackoverflow.com/questions/4303561/pyqt-and-qml-how-can-i-create-a-custom-data-model
+#https://stackoverflow.com/questions/58197429/pyside2-qml-populate-and-animate-gridview-model-delegate
 from PySide2.QtCore import QAbstractListModel , QSortFilterProxyModel
 from PySide2.QtGui import Qt
 from PySide2.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QListView
