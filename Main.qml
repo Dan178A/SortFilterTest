@@ -24,6 +24,7 @@ Window {
         width: parent.width*0.195
         height: parent.height
         model: ModelTable{}
+        modelSelected: ["number","max","min","length","depth"]
         onItemClicked: text1.text
         
     }

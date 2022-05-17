@@ -1,141 +1,106 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Window 2.15
-import QtQml.Models 2.3
-import "SortFilter"
-
+import QtQuick.Layouts 1.0
+import QtQuick.Window 2.12
 Item{
     id: root
     property string filterText: filterField.text
     property var model
+    property var modelSelected
+    
     signal itemClicked(var string);
     signal suggest(string query);
     signal search(string query);
 
-    DelegateModel {
-        id: delegateModel
+    ColumnLayout {
+        id: columnLayout
+        anchors.fill: parent
+        ListModel { id: todoModel }
 
-        //model: ModelTable {}
-        model: root.model
+        CustomtextfieldSearchS {
+            id: filterField
+            font.pixelSize: parent.width * 0.035
+            horizontalAlignment: Text.AlignLeft
+            Layout.topMargin: 100
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+            Layout.preferredHeight: 33
 
-        delegate: ItemDelegate {
-            id:dele
-            width: delegateModel.width
+            Layout.fillWidth: true
+            placeholderText: qsTr("Search")
+            //onTextChanged: sortFilterModel.update()
+            Keys.onReturnPressed: {
+                //console.log(filterField.text)
+                todoModel.append({ content: filterField.text })
+                filterField.text = ''
+            }
+        }
 
-             text: `${number} + ${elevation_Max} +  ${elevation_Min} +  ${length} +  ${depth} ` 
-            ///text: modelData
-            onClicked: {
-                    text1.text = dele.text
+        RowLayout {
+            id: rowLayout
+            Layout.preferredHeight: 33
+            Layout.fillWidth: true
+
+            ComboBox {
+                id: comboBox
+                model: root.modelSelected
+                Layout.preferredHeight: 23
+                Layout.fillHeight: false
+                Layout.preferredWidth: 200
+            }
+
+
+        }
+
+
+
+        ListView {
+            id: todoList
+            height: 500
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+
+            // use the model we defined above to render list
+            model: todoModel
+
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            delegate: ColumnLayout {
+                width: todoList.width
+                height: 55
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: 15
+
+                    // allow editing, so we could also store it on change in the future
+                    TextField {
+                        color: "#000000"
+                        background: Item {}
+                        // render data - you can write just 'content' instead of 'model.content'
+                        text: model.content
+                        Layout.fillWidth: true
+                    }
+
+                    RoundButton {
+                        text: "\u2796" // unicode heavy minus sign
+                        // remove this element from model by index
+                        // each delegate inside has access to "self" index property so we
+                        // can know which element this is
+                        onClicked: todoModel.remove(model.index)
+                        height: parent.height
+                    }
                 }
-            
-             
-        }
-
-        groups: DelegateModelGroup {
-            id: filterGroup
-            name: "filter"
-        }
-
-        filterOnGroup: filterText.length > 0 ? "filter" : "items"
-
-    }
-
-    onFilterTextChanged:{
-        let needleRegExp = new RegExp(filterText.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"), "ig");
-
-        for(let i = 0; i < delegateModel.items.count; i ++) {
-            let row = delegateModel.items.get(i);
-            let regNumber = needleRegExp.test(row.model.number)
-            let elevation_Max = needleRegExp.test(row.model.elevation_Max)
-            let elevation_Min = needleRegExp.test(row.model.elevation_Min)
-            let length = needleRegExp.test(row.model.length)
-            let depth = needleRegExp.test(row.model.depth)
-            if(regNumber || elevation_Max || elevation_Min || length || depth){
-                row.inFilter = true;
-            } else {
-                row.inFilter = false;
+                Rectangle { color: "#666"; height: 1; Layout.fillWidth: true }
             }
         }
-    }
-/*     SortFilterModel {
-        id: sortFilterModel
-        model: nameModel
-        filterAcceptsItem: function(item) {
-            return item.name.includes(filterField.text)
-        }
-         lessThan: function(left, right) {
-            if (sortByName.checked) {
-                var leftVal = left.name;
-                var rightVal = right.name;
-            } else {
-                leftVal = left.team;
-                rightVal = right.team;
-            }
-            return leftVal < rightVal ? -1 : 1;
-        } 
-        delegate: Text {
-            text: name + " (" + team + ")"
-        }
-    } */
-    CustomtextfieldSearchS {
-        id: filterField
-        x: parent.width * 0.066
-        y:  parent.height * 0.188
-        width: parent.width * 0.88
-        height: parent.height * 0.033
-        font.pixelSize: parent.width * 0.035
-        horizontalAlignment: Text.AlignLeft
-        placeholderText: qsTr("Search")
-        onTextChanged: sortFilterModel.update()
-    }
-    Row{
-        id: sortFilter
-        x: parent.width *0.05
-        y: parent.height * 0.25
-        width: parent.width *0.9
-        height: parent.height*02
-        anchors.horizontalCenter: parent.horizontalCenter
 
-    RadioButton{
-        text: qsTr("by number")
-        width: parent.width*0.4
-        height:parent.height*0.2
-    }
-    RadioButton{
-        text: qsTr("by elevation min")
-        x: parent.width *0.5
-        width: parent.width*0.4
-        height:parent.height*0.2
-    }
 
-    }
 
-    ListView {
-        id: rectangle
-        y: parent.height *0.5
-        height: parent.height*0.45
-        width: parent.width*0.8
-        anchors.horizontalCenter: parent.horizontalCenter
-        clip: true
 
-        model: delegateModel
-//        model:sortFilterModel
-        delegate: Rectangle{
-            id: bg
-            width:rectangle.width
-            height:rectangle.height
-            color:"gray"
-            Text{
-                id:txtbg
-                font.pixelSize:12
-                text: modelData
-            }
 
-        }
 
-        ScrollIndicator.vertical: ScrollIndicator { }
-    }
     
+}
 }
 /*
         Connections {
